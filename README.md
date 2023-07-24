@@ -1,15 +1,13 @@
 # CITP CAEX component. 
-beta v.0.3TD build: 64-bit 2018.27840
-Capture ver 24.1.22 Demo
+Beta v.0.3. TD build: 64-bit 2018.27840. Capture ver 24.1.22 Demo
 
-## Описание.
-Компонента предназначена для передачи данных по протоколу CITP CAEX в программувизуализатор Capture. 
-При этом используется два канала для общения - UDP и TCP. Udp используется для установки связи и стрима данных, а TCP используется для настройкипараметров CAEX.
-## Общий принцип работы.
-1. Открывается multicast udp соединение и ожидается прием CITP сообщений от Capture, где будет указано на каком порту Capture ожидает TCP соединение
-2. Если получено соответствующее сообщение, то открывается TCP соединение иначинается настройка CAEX.
-3. Настройка CAEX заключается в том, что компонента сообщает Capture ID сессии -это параметр source code, в дальнейшем он понадобится, чтобы стримить данныелазера через UDP соединение, видимо с помощью него Capture согласовываетданные из этих двух каналов - TCP и UDP.
-4. Затем отправляется список всех фидов - их названия, затем Capture присваиваетим номера и присылает в ответ.
-5. Также Capture присылает свой статус готовности принимать данные лазеров - этотстатус заключен в параметре FrameRate(см. CAEX spec LaserFeedControlmessage). Если FrameRate 0, значит надо прекратить стрим, если нет - то этотребуемый FrameRate. В компоненте это число отображается в read-onlyпараметре *Required Fps*. 
-**ВАЖНО**. FPS TD проекта должен быть установлен какв параметре Required Fps компоненты
-6. Через открытое UDP соединение начинается стрим данных. Компонента каждыйфрэйм собирает входные данные и пакует их согласно формату CAEXLaserFeedFrame message
+## Description:
+The component is designed to transmit data via the CITP CAEX protocol to the Capture visualization software. Two channels are used for communication - UDP and TCP. UDP is used for establishing a connection and streaming data, while TCP is used for configuring CAEX parameters.
+
+## General working principle:
+1. A multicast UDP connection is opened, and the component waits to receive CITP messages from Capture, specifying the port on which Capture expects the TCP connection.
+2. If the corresponding message is received, a TCP connection is established, and the CAEX configuration begins.
+3. The CAEX configuration involves the component informing Capture about the session ID - this is the source code parameter, which will later be used to stream laser data via the UDP connection. Apparently, this ID helps Capture coordinate data from these two channels - TCP and UDP.
+4. Then, a list of all feeds and their names is sent, and Capture assigns them numbers and sends them back as a response.
+5. Capture also sends its status of readiness to receive laser data - this status is encapsulated in the FrameRate parameter (see CAEX spec LaserFeedControl message). If the FrameRate is 0, it means that the stream should be stopped, if not, it specifies the required FrameRate. In the component, this number is displayed in the read-only parameter *Required Fps.* **IMPORTANT**. The FPS of the TD project must be set as the value in the "Required Fps" parameter of the component.
+6. The data streaming starts through the opened UDP connection. The component collects input data for each frame and packs them according to the CAEXLaserFeedFrame message format.
